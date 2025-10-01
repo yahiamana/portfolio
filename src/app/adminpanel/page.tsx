@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 export default function AdminPanel() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -242,7 +243,7 @@ export default function AdminPanel() {
           <div className="mt-8 bg-slate-900 p-6 rounded-2xl">
             <h3 className="text-xl font-bold mb-4">Image Preview</h3>
             <div className="relative h-64 w-full rounded-lg overflow-hidden">
-              <img 
+              <Image
                 src={form.image} 
                 alt="Preview" 
                 className="object-cover w-full h-full"
