@@ -55,19 +55,20 @@ export default function AdminPanel() {
     try {
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('upload_preset', 'projects_upload'); // Create this in Cloudinary
       
-      const response = await fetch('/api/upload', {
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`, {
         method: 'POST',
         body: formData,
       });
 
       const result = await response.json();
 
-      if (response.ok && result.url) {
-        setForm({ ...form, image: result.url });
-        alert('Image uploaded successfully!');
+      if (response.ok && result.secure_url) {
+        setForm({ ...form, image: result.secure_url });
+        alert('Image uploaded successfully to Cloudinary!');
       } else {
-        throw new Error(result.error || `Upload failed with status: ${response.status}`);
+        throw new Error(result.error?.message || 'Upload failed');
       }
     } catch (error) {
       console.error('Upload error:', error);
@@ -186,7 +187,7 @@ export default function AdminPanel() {
                 disabled={isUploading}
               />
               {isUploading && (
-                <div className="text-cyan-400 text-center">Uploading image...</div>
+                <div className="text-cyan-400 text-center">Uploading image to Cloudinary...</div>
               )}
               {form.image && !isUploading && (
                 <div className="text-green-400 text-center">✓ Image uploaded successfully!</div>
